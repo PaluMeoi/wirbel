@@ -1,3 +1,4 @@
 {
-  "name": "Wirbel-Dev"
+  "name": "Wirbel-Dev",
+  "image": "mcr.microsoft.com/devcontainers/typescript-node"
 }
