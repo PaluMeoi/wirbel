@@ -10,6 +10,16 @@ import { NAV_THEME } from '~/lib/constants';
 import { useColorScheme } from '~/lib/useColorScheme';
 import { PortalHost } from '~/components/primitives/portal';
 import { ThemeToggle } from '~/components/ThemeToggle';
+import {Pocketbase} from "pocketbase-react";
+import ExpoSystemUIWeb from "expo-system-ui/src/ExpoSystemUI.web";
+import ExpoWebBrowser from "expo-web-browser/src/ExpoWebBrowser";
+
+// Pocketbase config
+const serverURL = "https://wirbel.pockethost.io"
+const initialCollections = ["users"]
+const webRedirectURL = "http://localhost:8081"
+const mobileRedirectURL = "exp://lpokuja-palurien-8081.exp.direct"
+
 
 const LIGHT_THEME: Theme = {
   dark: false,
@@ -62,18 +72,14 @@ export default function RootLayout() {
   }
 
   return (
-    <ThemeProvider value={isDarkColorScheme ? DARK_THEME : LIGHT_THEME}>
-      <StatusBar style={isDarkColorScheme ? 'light' : 'dark'} />
-      <Stack>
-        <Stack.Screen
-          name='index'
-          options={{
-            title: 'Starter Base',
-            headerRight: () => <ThemeToggle />,
-          }}
-        />
-      </Stack>
-      <PortalHost />
-    </ThemeProvider>
+      <Pocketbase serverURL={serverURL} webRedirectUrl={webRedirectURL} mobileRedirectUrl={mobileRedirectURL} openURL={async (url) => {
+      await ExpoWebBrowser.openBrowserAsync(url)}}>
+        <ThemeProvider value={isDarkColorScheme ? DARK_THEME : LIGHT_THEME}>
+          <StatusBar style={isDarkColorScheme ? 'light' : 'dark'} />
+          <Stack screenOptions={{headerShown: false}}/>
+          <PortalHost />
+        </ThemeProvider>
+      </Pocketbase>
+
   );
 }
